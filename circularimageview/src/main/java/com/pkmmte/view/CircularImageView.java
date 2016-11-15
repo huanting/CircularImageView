@@ -239,7 +239,7 @@ public class CircularImageView extends ImageView {
 
 		// Get the exact X/Y axis of the view
 		int center = canvasSize / 2;
-
+		float shadowR = 0;
 
 		if(hasSelector && isSelected) { // Draw the selector stroke & apply the selector filter, if applicable
 			outerWidth = selectorStrokeWidth;
@@ -250,10 +250,14 @@ public class CircularImageView extends ImageView {
 		}
 		else if(hasBorder) { // If no selector was drawn, draw a border and clear the filter instead... if enabled
 			outerWidth = borderWidth;
+
+			if(shadowEnabled)
+				shadowR = shadowRadius;
+
 			center = (canvasSize - (outerWidth * 2)) / 2;
 
 			paint.setColorFilter(null);
-			RectF rekt = new RectF(0 + outerWidth / 2, 0 + outerWidth / 2, canvasSize - outerWidth / 2, canvasSize - outerWidth / 2);
+			RectF rekt = new RectF(shadowR + outerWidth / 2, shadowR + outerWidth / 2, canvasSize - outerWidth / 2 - shadowR, canvasSize - outerWidth / 2 - shadowR);
 			canvas.drawArc(rekt, 360, 360, false, paintBorder);
 			//canvas.drawCircle(center + outerWidth, center + outerWidth, ((canvasSize - (outerWidth * 2)) / 2) + outerWidth - 4.0f, paintBorder);
 		}
@@ -261,7 +265,7 @@ public class CircularImageView extends ImageView {
 			paint.setColorFilter(null);
 
 		// Draw the circular image itself
-		canvas.drawCircle(center + outerWidth, center + outerWidth, ((canvasSize - (outerWidth * 2)) / 2), paint);
+		canvas.drawCircle(center + outerWidth, center + outerWidth, ((canvasSize - (outerWidth * 2) - (shadowR * 2)) / 2), paint);
 	}
 
 	@Override
